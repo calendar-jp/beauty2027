@@ -1,0 +1,1134 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --rose:       #8D6E63;
+  --rose-light: #FFB300;
+  --rose-dark:  #6D4C41;
+  --bg-top:     #FFF8E1;
+  --bg-mid:     #FFECB3;
+  --bg-btm:     #FFE082;
+  --card-bg:    rgba(255, 248, 225, 0.92);
+  --card-border:rgba(141, 110, 99, 0.22);
+  --text-main:  #8D6E63;
+  --text-sub:   #A1887F;
+}
+
+html {
+  overflow-x: hidden;
+  background-color: #FFF8E1 !important;
+}
+
+body {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+  background-color: #FFF8E1 !important;
+  min-height: 100vh;
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* ── Auth Screen ── */
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+.auth-inner {
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.auth-title-area {
+  text-align: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.auth-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--rose);
+  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+}
+
+.auth-date {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+}
+
+.auth-img-wrap {
+  position: relative;
+  width: 90%;
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.auth-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.auth-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.7));
+  padding: 32px 20px 20px;
+}
+
+.auth-overlay-label {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.auth-input-wrap { margin-bottom: 12px; }
+
+.auth-input {
+  width: 100%;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: var(--rose-dark);
+  background: rgba(255,255,255,0.9);
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+
+.auth-input:focus {
+  box-shadow: 0 0 0 2px rgba(141,110,99,0.35);
+}
+
+.auth-input::placeholder { color: rgba(141,110,99,0.55); }
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  box-shadow: 0 4px 20px rgba(245,127,23,0.4);
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(245,127,23,0.52);
+}
+
+.auth-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.auth-error {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #FFE082;
+  text-align: center;
+}
+
+.auth-bottom-pad { padding-bottom: 36px; }
+
+/* ── Container ── */
+.container {
+  max-width: 430px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 16px 100px;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+/* ── Header ── */
+header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(141,110,99,0.18);
+}
+
+h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #6D4C41;
+  letter-spacing: 0.12em;
+}
+
+.date {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #5D4037;
+  letter-spacing: 0.08em;
+}
+
+/* ── Page transitions ── */
+.page { animation: pageReveal 0.4s ease; }
+
+@keyframes pageReveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Install Banner ── */
+.install-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(141,110,99,0.06);
+  border: 1px solid rgba(141,110,99,0.22);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+.install-banner-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+.install-banner-text {
+  flex: 1;
+  font-size: 0.77rem;
+  color: var(--rose);
+  letter-spacing: 0.03em;
+}
+
+.install-btn {
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1px solid var(--rose);
+  background: transparent;
+  color: var(--rose);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.install-btn:hover { background: rgba(141,110,99,0.08); }
+
+.install-close {
+  background: none;
+  border: none;
+  color: var(--text-sub);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+/* ── iOS Popup ── */
+.ios-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(80,50,30,0.4);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.ios-popup {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(96vw, 430px);
+  background: #FFFDF5;
+  border: 1px solid rgba(141,110,99,0.28);
+  border-bottom: none;
+  border-radius: 22px 22px 0 0;
+  padding: 28px 24px 40px;
+  z-index: 101;
+  box-shadow: 0 -8px 40px rgba(141,110,99,0.12);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(100%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+
+.ios-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(141,110,99,0.08);
+  border: 1px solid rgba(141,110,99,0.25);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.8rem;
+  color: var(--rose);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.ios-popup-close:hover { background: rgba(141,110,99,0.15); }
+
+.ios-popup-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--rose);
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 0.06em;
+}
+
+.ios-steps { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.ios-steps li { display: flex; align-items: flex-start; gap: 12px; }
+
+.step-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose-dark), var(--rose-light));
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-body { font-size: 0.84rem; color: var(--text-main); line-height: 1.65; }
+.step-body strong { color: var(--rose); }
+.step-sub { font-size: 0.74rem; color: var(--text-sub); }
+
+/* ── Sign Selector Label ── */
+.label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6D4C41;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 0.12em;
+  opacity: 1;
+}
+
+/* ── Sign Grid ── */
+.sign-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sign-btn {
+  background: #C8A165;
+  border: 1px solid #FFE082;
+  border-radius: 14px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.sign-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,179,0,0.14), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.sign-btn:hover {
+  background: #FFF8E1;
+  border-color: #FFB300;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(141,110,99,0.16), 0 0 0 1px rgba(141,110,99,0.1);
+}
+
+.sign-btn:hover::after { opacity: 1; }
+.sign-btn:active { transform: scale(0.96); }
+
+.sign-btn .char-icon { width: 54px; height: 62px; position: relative; z-index: 1; color: #6D4C41; }
+
+.sign-btn-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 0;
+  margin: 0;
+  background: #C8A165;
+}
+
+.sign-btn-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+}
+
+.sign-btn .btn-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding: 6px 4px 7px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-zodiac-icon {
+  display: inline-flex;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  color: #ffffff;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.95));
+}
+
+.btn-zodiac-icon svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
+/* ── Fortune Pages (full-screen overlay) ── */
+.fortune-page {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 430px;
+  z-index: 5;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  background: #FFF8E1;
+  padding-top: 0;
+  animation: none;
+}
+
+.fortune-page:not([hidden]) {
+  display: flex;
+}
+
+.fortune-img-area {
+  flex-shrink: 0;
+  padding: 0 16px 0;
+}
+
+.fortune-page-heading {
+  font-size: 1.125rem;
+  color: #6D4C41;
+  text-align: center;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+  padding: 12px 0 0;
+  margin-bottom: 12px;
+}
+
+.sign-overlay-top {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sign-icon-sm {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+}
+
+.sign-header-name {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.96);
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fortune-img-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+  opacity: 0;
+}
+
+@keyframes fortuneImgReveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fortune-img-frame.is-visible {
+  animation: fortuneImgReveal 0.8s ease-out 0.8s both;
+}
+
+.lucky-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  padding: 24px 14px 14px;
+  border-radius: 0 0 12px 12px;
+}
+
+.lucky-overlay-inner {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.lucky-overlay-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.fortune-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+}
+
+.fortune-title-below {
+  padding: 18px 16px 0;
+  text-align: center;
+}
+
+.fortune-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #5D4037;
+  letter-spacing: 0.08em;
+}
+
+/* ── Fortune Content (below image) ── */
+.fortune-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 4px;
+  gap: 8px;
+  min-height: 0;
+}
+
+.fortune-content .stars {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  flex-shrink: 0;
+  letter-spacing: 3px;
+  color: #F57F17;
+}
+
+@keyframes starPop {
+  0%   { opacity: 0; transform: scale(0.3); }
+  60%  { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.star-pop {
+  display: inline-block;
+  animation: starPop 0.5s ease forwards;
+}
+
+.fortune-content .fortune-text {
+  font-size: 0.83rem;
+  line-height: 1.88;
+  flex: 1;
+  overflow: hidden;
+  color: #5D4037;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+}
+
+.fortune-content.card-overall,
+.fortune-content.card-love,
+.fortune-content.card-work,
+.fortune-content.card-money { border-top: none; }
+
+/* ── Lucky Badges (top page) ── */
+.lucky-inline {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lucky-badge {
+  padding: 5px 16px;
+  background: rgba(141,110,99,0.07);
+  border: 1px solid rgba(141,110,99,0.22);
+  border-radius: 50px;
+  font-size: 0.73rem;
+  color: var(--rose);
+  letter-spacing: 0.05em;
+}
+
+/* ── Nav Buttons ── */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  gap: 10px;
+}
+
+.nav-btn {
+  font-family: inherit;
+  font-size: 0.87rem;
+  font-weight: 800;
+  padding: 6px 22px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.22s;
+  letter-spacing: 0.07em;
+}
+
+.back-btn {
+  background: transparent;
+  border: 1.5px solid #8D6E63;
+  color: #6D4C41;
+}
+
+.back-btn:hover {
+  border-color: var(--rose-dark);
+  background: rgba(141,110,99,0.07);
+  transform: translateX(-3px);
+}
+
+.next-btn {
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(245,127,23,0.32);
+}
+
+.next-btn:hover {
+  transform: translateX(3px);
+  box-shadow: 0 7px 26px rgba(141,110,99,0.44);
+  background: linear-gradient(135deg, #EF6C00, #FF8F00);
+}
+
+.next-btn-top {
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(141,110,99,0.28);
+}
+
+.next-btn-top:hover {
+  box-shadow: 0 7px 26px rgba(141,110,99,0.44);
+  background: linear-gradient(135deg, #EF6C00, #FF8F00);
+}
+
+.fortune-nav {
+  flex-shrink: 0;
+  margin-top: 0;
+  padding: 0 20px 36px;
+}
+
+/* ── Responsive (iPhone 13 390×844px 基準) ── */
+@media (max-width: 430px) {
+  /* コンテナ */
+  .container { padding: 12px 16px 24px; }
+
+  /* ヘッダー */
+  header { margin-bottom: 12px; padding-bottom: 10px; }
+  h1 { font-size: 1.3rem; letter-spacing: 0.08em; }
+  .date { margin-top: 5px; font-size: 0.8rem; }
+
+  /* ラベル */
+  .label { font-size: 0.95rem; margin-bottom: 10px; letter-spacing: 0.08em; }
+
+  /* PWAインストールバナーは常に非表示 */
+  .install-banner { display: none !important; }
+
+  /* 星座グリッド：3列、縦長カード */
+  .sign-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; padding: 0 12px; gap: 6px; margin-bottom: 8px; }
+  .sign-btn-img-wrap { aspect-ratio: 4 / 5; border-radius: 12px; }
+  .sign-btn { border-radius: 12px; }
+  .sign-btn .btn-name { font-size: 16px; padding: 6px 4px 7px; }
+  .btn-zodiac-icon { width: 17px; height: 17px; }
+  .btn-zodiac-icon svg { width: 17px; height: 17px; }
+
+  /* 占い結果ページ */
+  .fortune-page { padding-top: 0; }
+  .fortune-img-area { padding: 6px 14px 0; }
+  .fortune-page-heading { font-size: 1rem; padding: 8px 0 0; margin-bottom: 8px; }
+  .fortune-img-frame { aspect-ratio: 3 / 4; width: 90%; margin: 0 auto; max-height: 50vh; }
+  .fortune-title-below { padding: 14px 12px 0; }
+  .fortune-title { font-size: 1rem; }
+  .fortune-content { padding: 6px 20px 4px; gap: 6px; }
+  .fortune-content .stars { font-size: 1.1rem; letter-spacing: 2px; }
+  .fortune-content .fortune-text { font-size: 0.9rem; line-height: 1.7; max-height: 25vh; overflow: hidden; }
+  .fortune-nav { padding: 0 20px 20px; }
+  .nav-btn { padding: 10px 22px; font-size: 0.87rem; }
+  .sign-btn .char-icon { width: 44px; height: 50px; }
+}
+
+/* ── Override: はみ出し強制防止（最終上書き） ── */
+html, body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+.container {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.sign-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0 8px !important;
+  gap: 6px !important;
+}
+
+/* ── PC Layout (768px以上) ── */
+@media (min-width: 768px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF8E1 0%, #FFECB3 50%, #FFD54F 100%) !important;
+  }
+
+  .container {
+    max-width: 430px !important;
+    width: 100% !important;
+    min-height: 100vh;
+    background: #FFF8E1;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .sign-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+
+  .install-banner {
+    display: none !important;
+  }
+
+  @keyframes heartFloat {
+    0%   { transform: translateY(0)       translateX(0);     opacity: 0; }
+    8%   { transform: translateY(-8vh)    translateX(15px);  opacity: 1; }
+    25%  { transform: translateY(-25vh)   translateX(25px); }
+    50%  { transform: translateY(-50vh)   translateX(-20px); }
+    75%  { transform: translateY(-75vh)   translateX(18px); }
+    90%  { transform: translateY(-100vh)  translateX(-10px); opacity: 0.45; }
+    100% { transform: translateY(-115vh)  translateX(0);     opacity: 0; }
+  }
+
+  .heart-float {
+    position: fixed;
+    bottom: -30px;
+    color: rgba(230, 81, 0, 0.6);
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1;
+    animation: heartFloat linear infinite;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   美女カレンダー2027 追加スタイル
+   ═══════════════════════════════════════════ */
+.app-subtitle {
+  margin-top: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  letter-spacing: 0.2em;
+}
+
+/* ── 星座登録 ── */
+.register-sub {
+  font-size: 0.76rem;
+  color: var(--text-sub);
+  text-align: center;
+  margin: -4px 0 16px;
+}
+
+.zodiac-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 8px;
+}
+
+.zodiac-pick-btn {
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 4px 12px;
+  background: #fff;
+  border: 1.5px solid #FFE082;
+  border-radius: 14px;
+  color: #6D4C41;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.zodiac-pick-btn svg { width: 34px; height: 34px; color: #F57F17; }
+.zodiac-pick-btn:hover { border-color: #FFA000; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245,127,23,0.18); }
+.zodiac-pick-btn.is-selected { border-color: #8D6E63; background: #FFECB3; }
+
+.register-cancel {
+  display: block;
+  margin: 20px auto 0;
+}
+
+/* ── カレンダー：ツールバー ── */
+.cal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.view-tabs {
+  display: inline-flex;
+  background: #FFECB3;
+  border-radius: 50px;
+  padding: 3px;
+}
+
+.view-tab {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 56px;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 50px;
+  background: transparent;
+  color: #8D6E63;
+  cursor: pointer;
+}
+
+.view-tab.is-active {
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(245,127,23,0.3);
+}
+
+.change-zodiac-btn {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border: 1px solid rgba(141,110,99,0.4);
+  border-radius: 50px;
+  background: transparent;
+  color: #8D6E63;
+  cursor: pointer;
+}
+
+.change-zodiac-btn:hover { background: rgba(141,110,99,0.08); }
+
+/* ── カレンダー：ナビ ── */
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.cal-label {
+  flex: 1;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #5D4037;
+  letter-spacing: 0.06em;
+}
+
+.cal-label.is-small { font-size: 0.86rem; }
+
+.cal-nav-btn {
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border: 1.5px solid #8D6E63;
+  border-radius: 50px;
+  background: transparent;
+  color: #8D6E63;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cal-nav-btn:hover:not(:disabled) { background: rgba(141,110,99,0.08); }
+.cal-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── 月表示 ── */
+.cal-weekdays,
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.cal-weekdays {
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  color: #8D6E63;
+}
+
+.cal-weekdays .sun { color: #D84315; }
+.cal-weekdays .sat { color: #1E88E5; }
+
+.cal-cell {
+  font-family: inherit;
+  min-height: 52px;
+  padding: 4px 1px 3px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #fff;
+  color: #5D4037;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.cal-cell.is-empty { background: transparent; cursor: default; }
+.cal-cell:not(.is-empty):hover { border-color: #FFB300; }
+
+.cal-day {
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 50%;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cal-holiday {
+  font-size: 0.5rem;
+  line-height: 1.2;
+  text-align: center;
+  color: #D84315;
+  word-break: break-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.is-sun .cal-day, .is-holiday .cal-day { color: #D84315; }
+.is-sat .cal-day { color: #1E88E5; }
+
+.cal-cell.is-today { border-color: #F57F17; background: #FFF3C4; }
+.cal-cell.is-today .cal-day {
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  color: #fff;
+}
+
+/* ── 週表示 ── */
+.week-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+.week-row {
+  font-family: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #fff;
+  color: #5D4037;
+  cursor: pointer;
+  text-align: left;
+}
+
+.week-row:hover { border-color: #FFB300; }
+.week-row .wk-date { font-size: 0.95rem; font-weight: 700; min-width: 64px; }
+.week-row .wk-dow  { font-size: 0.85rem; font-weight: 700; width: 1.6em; text-align: center; }
+.week-row .wk-holiday { font-size: 0.74rem; color: #D84315; flex: 1; }
+.week-row .wk-today-badge {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  border-radius: 50px;
+  padding: 2px 8px;
+  margin-left: auto;
+}
+.week-row.is-sun .wk-date, .week-row.is-sun .wk-dow,
+.week-row.is-holiday .wk-date, .week-row.is-holiday .wk-dow { color: #D84315; }
+.week-row.is-sat .wk-date, .week-row.is-sat .wk-dow { color: #1E88E5; }
+.week-row.is-today { border: 2px solid #F57F17; background: #FFF3C4; }
+.week-row.is-outside { opacity: 0.4; }
+
+/* ── 今日の占いボタン ── */
+.today-fortune-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: linear-gradient(135deg, #F57F17, #FFA000);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(245,127,23,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.today-fortune-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,127,23,0.5); }
+
+.my-zodiac-note {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--text-sub);
+}
+
+/* ── トースト ── */
+.cal-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  color: #fff;
+  background: rgba(93,64,55,0.88);
+  border-radius: 50px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeUp 0.25s ease;
+}
+
+/* ── 今日の占い ── */
+.today-sub {
+  margin: -12px 0 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: #8D6E63;
+}
+
+.sign-btn.is-mine {
+  border: 3px solid #8D6E63;
+  box-shadow: 0 0 0 2px #FFB300;
+}
+
+.mine-label {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  background: #8D6E63;
+  border-radius: 50px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.today-nav { display: flex; justify-content: center; margin-top: 16px; }
