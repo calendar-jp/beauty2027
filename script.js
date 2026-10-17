@@ -476,6 +476,12 @@ function formatDate(d) {
   return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日（${week[d.getDay()]}）`;
 }
 
+// 占いページ見出し用（年なし）: 10月18日（日）
+function formatMonthDay(d) {
+  const week = ['日', '月', '火', '水', '木', '金', '土'];
+  return `${d.getMonth() + 1}月${d.getDate()}日（${week[d.getDay()]}）`;
+}
+
 function showPage(pageId) {
   clearAllTimers();
   if (pageId === 'page-calendar') {
@@ -498,6 +504,9 @@ function showPage(pageId) {
       imgFrameEl.style.transform  = '';
       imgFrameEl.classList.remove('is-visible');
     }
+    // 見出し1行目の日付は表示のたびに取得し直す（日またぎ対策）
+    const dateEl = pageEl && pageEl.querySelector('.fortune-title-date');
+    if (dateEl) dateEl.textContent = formatMonthDay(new Date());
   }
   PAGES.forEach(id => {
     document.getElementById(id).hidden = (id !== pageId);
@@ -509,10 +518,10 @@ function showPage(pageId) {
 }
 
 const CATEGORY_LABELS = {
-  overall: '今日の総合運',
-  love:    '今日の恋愛運',
-  work:    '今日の仕事運',
-  money:   '今日の金運',
+  overall: '総合運',
+  love:    '恋愛運',
+  work:    '仕事運',
+  money:   '金運',
 };
 
 function setPortrait(elId, nameElId, sign) {

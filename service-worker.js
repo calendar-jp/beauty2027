@@ -1,4 +1,4 @@
-const CACHE_NAME = 'beauty-calendar-2027-v1';
+const CACHE_NAME = 'beauty-calendar-2027-v2';
 
 // Network First で扱うコアファイル（更新が頻繁）
 const NETWORK_FIRST_ASSETS = [
