@@ -1,4 +1,25 @@
 // ═══════════════════════════════════════════
+//  カレンダー背景画像（月ごとに固定）
+//  差し替えるときは url を変更してください
+// ═══════════════════════════════════════════
+const MONTH_BG_IMAGES = [
+  { month: '2026-11', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_001.jpg' },
+  { month: '2026-12', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_008.jpg' },
+  { month: '2027-01', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_015.jpg' },
+  { month: '2027-02', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_021.jpg' },
+  { month: '2027-03', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_028.jpg' },
+  { month: '2027-04', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_035.jpg' },
+  { month: '2027-05', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_042.jpg' },
+  { month: '2027-06', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_049.jpg' },
+  { month: '2027-07', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_056.jpg' },
+  { month: '2027-08', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_063.jpg' },
+  { month: '2027-09', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_071.jpg' },
+  { month: '2027-10', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_077.jpg' },
+  { month: '2027-11', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_084.jpg' },
+  { month: '2027-12', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_092.jpg' },
+];
+
+// ═══════════════════════════════════════════
 //  星座シルエット SVG (12星座 100×100 リアルシルエット)
 // ═══════════════════════════════════════════
 const ZODIAC_SILHOUETTES = {
@@ -272,7 +293,7 @@ function animateFortunePage(pageId) {
   }
 }
 
-const PAGES = ['page-register', 'page-calendar', 'page-today', 'page-overall', 'page-love', 'page-work', 'page-money'];
+const PAGES = ['page-calendar', 'page-today', 'page-overall', 'page-love', 'page-work', 'page-money'];
 
 const BEAUTY_IMAGES = [
   'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_001.jpg',
@@ -485,7 +506,7 @@ function formatMonthDay(d) {
 function showPage(pageId) {
   clearAllTimers();
   if (pageId === 'page-calendar') {
-    renderCalendar();
+    renderMonth();
     ensureHearts();
   }
   if (pageId === 'page-today') {
@@ -511,6 +532,8 @@ function showPage(pageId) {
   PAGES.forEach(id => {
     document.getElementById(id).hidden = (id !== pageId);
   });
+  // 今日の占い画面では見出し下の日付だけを表示する
+  document.getElementById('today-date').hidden = (pageId === 'page-today');
   if (FORTUNE_PAGE_IDS.has(pageId)) {
     animateFortunePage(pageId);
   }
@@ -725,8 +748,6 @@ initHearts();
 // ═══════════════════════════════════════════
 //  美女カレンダー2027
 // ═══════════════════════════════════════════
-const ZODIAC_LS_KEY = 'my_zodiac_calendar2027';
-
 // 出典: 内閣府 国民の祝日
 // 2026年11月〜2027年12月（振替休日を含む）
 const HOLIDAYS = [
@@ -766,24 +787,15 @@ function ymd(d) {
 
 function isSameDay(a, b) { return ymd(a) === ymd(b); }
 
-function startOfWeek(d) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay());
-}
-
 function clampToRange(d) {
   if (d < CAL_START) return new Date(CAL_START);
   if (d > CAL_END)   return new Date(CAL_END);
   return d;
 }
 
-const WEEK_MIN = startOfWeek(CAL_START).getTime();
-const WEEK_MAX = startOfWeek(CAL_END).getTime();
-
 const _initialDate = clampToRange(new Date());
 const calState = {
-  view: 'month',
   monthIndex: _initialDate.getFullYear() * 12 + _initialDate.getMonth(),
-  weekStart: startOfWeek(_initialDate),
 };
 
 function dayClasses(d, today) {
@@ -813,6 +825,39 @@ function showCalToast() {
   _toastTimer = setTimeout(() => { toast.hidden = true; }, 2500);
 }
 
+// 長い祝日名は自然な位置で2行に分ける（例: 勤労感謝／の日、天皇／誕生日）
+function holidayLabelHTML(name) {
+  let parts = [name];
+  if (name.length > 4) {
+    parts = name.endsWith('の日') ? [name.slice(0, -2), 'の日'] : [name.slice(0, 2), name.slice(2)];
+  }
+  return parts.map(p => `<span>${p}</span>`).join('');
+}
+
+function monthBgUrl(year, month) {
+  const key = `${year}-${String(month + 1).padStart(2, '0')}`;
+  const entry = MONTH_BG_IMAGES.find(e => e.month === key);
+  return entry ? entry.url : FALLBACK_IMAGES[0];
+}
+
+function applyMonthBg(year, month) {
+  const img = document.getElementById('cal-bg-img');
+  if (img.dataset.month === `${year}-${month}`) return;
+  img.dataset.month = `${year}-${month}`;
+  img.onerror = function() {
+    this.onerror = null;
+    this.src = FALLBACK_IMAGES[calState.monthIndex % FALLBACK_IMAGES.length];
+  };
+  img.src = monthBgUrl(year, month);
+  // 前後の月の背景を先読み
+  [-1, 1].forEach(off => {
+    const idx = calState.monthIndex + off;
+    if (idx >= MONTH_MIN && idx <= MONTH_MAX) {
+      new Image().src = monthBgUrl(Math.floor(idx / 12), idx % 12);
+    }
+  });
+}
+
 function renderMonth() {
   const today = new Date();
   const year  = Math.floor(calState.monthIndex / 12);
@@ -820,6 +865,7 @@ function renderMonth() {
   document.getElementById('month-label').textContent = `${year}年${month + 1}月`;
   document.getElementById('month-prev').disabled = calState.monthIndex <= MONTH_MIN;
   document.getElementById('month-next').disabled = calState.monthIndex >= MONTH_MAX;
+  applyMonthBg(year, month);
 
   const grid = document.getElementById('month-grid');
   grid.innerHTML = '';
@@ -840,136 +886,26 @@ function renderMonth() {
     cell.className = ['cal-cell', ...dayClasses(d, today)].join(' ');
     const holiday = HOLIDAY_MAP.get(ymd(d));
     cell.innerHTML = `<span class="cal-day">${dayNum}</span>` +
-      (holiday ? `<span class="cal-holiday">${holiday}</span>` : '');
+      (holiday ? `<span class="cal-holiday">${holidayLabelHTML(holiday)}</span>` : '');
     cell.setAttribute('aria-label', `${month + 1}月${dayNum}日（${WEEKDAYS[d.getDay()]}）${holiday ? ' ' + holiday : ''}`);
     cell.addEventListener('click', () => onDateTap(d));
     grid.appendChild(cell);
   }
 }
 
-function renderWeek() {
-  const today = new Date();
-  const start = calState.weekStart;
-  const end   = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
-  const endLabel = end.getFullYear() !== start.getFullYear()
-    ? `${end.getFullYear()}年${end.getMonth() + 1}月${end.getDate()}日`
-    : `${end.getMonth() + 1}月${end.getDate()}日`;
-  document.getElementById('week-label').textContent =
-    `${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}日 〜 ${endLabel}`;
-  document.getElementById('week-prev').disabled = start.getTime() <= WEEK_MIN;
-  document.getElementById('week-next').disabled = start.getTime() >= WEEK_MAX;
-
-  const list = document.getElementById('week-list');
-  list.innerHTML = '';
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-    const holiday = HOLIDAY_MAP.get(ymd(d));
-    const li  = document.createElement('li');
-    const row = document.createElement('button');
-    const cls = ['week-row', ...dayClasses(d, today)];
-    if (d < CAL_START || d > CAL_END) cls.push('is-outside');
-    row.className = cls.join(' ');
-    row.innerHTML =
-      `<span class="wk-date">${d.getMonth() + 1}月${d.getDate()}日</span>` +
-      `<span class="wk-dow">${WEEKDAYS[d.getDay()]}</span>` +
-      `<span class="wk-holiday">${holiday || ''}</span>` +
-      (isSameDay(d, today) ? '<span class="wk-today-badge">今日</span>' : '');
-    row.addEventListener('click', () => onDateTap(d));
-    li.appendChild(row);
-    list.appendChild(li);
-  }
-}
-
-function renderCalendar() {
-  const isMonth = calState.view === 'month';
-  document.getElementById('month-view').hidden = !isMonth;
-  document.getElementById('week-view').hidden  = isMonth;
-  const tabMonth = document.getElementById('tab-month');
-  const tabWeek  = document.getElementById('tab-week');
-  tabMonth.classList.toggle('is-active', isMonth);
-  tabWeek.classList.toggle('is-active', !isMonth);
-  tabMonth.setAttribute('aria-selected', String(isMonth));
-  tabWeek.setAttribute('aria-selected', String(!isMonth));
-  if (isMonth) renderMonth(); else renderWeek();
-
-  const sign = getMySign();
-  document.getElementById('my-zodiac-name').textContent = sign ? sign.name : '未登録';
-}
-
-// ── 自分の星座 ──
-function getMySign() {
-  const key = localStorage.getItem(ZODIAC_LS_KEY);
-  return SIGNS.find(s => s.charKey === key) || null;
-}
-
 function updateTodayPage() {
   document.getElementById('today-fortune-date').textContent = formatDate(new Date());
-  const mine = getMySign();
-  document.querySelectorAll('#sign-grid .sign-btn').forEach(btn => {
-    const isMine = !!mine && btn.dataset.charKey === mine.charKey;
-    btn.classList.toggle('is-mine', isMine);
-    const label = btn.querySelector('.mine-label');
-    if (isMine && !label) {
-      const span = document.createElement('span');
-      span.className = 'mine-label';
-      span.textContent = 'あなたの星座';
-      btn.querySelector('.sign-btn-img-wrap').appendChild(span);
-    } else if (!isMine && label) {
-      label.remove();
-    }
-  });
 }
-
-function openRegister() {
-  const mine = getMySign();
-  document.getElementById('register-cancel').hidden = !mine;
-  document.querySelectorAll('#register-grid .zodiac-pick-btn').forEach(btn => {
-    btn.classList.toggle('is-selected', !!mine && btn.dataset.charKey === mine.charKey);
-  });
-  showPage('page-register');
-}
-
-// 星座登録グリッド生成
-const registerGrid = document.getElementById('register-grid');
-SIGNS.forEach(sign => {
-  const btn = document.createElement('button');
-  btn.className = 'zodiac-pick-btn';
-  btn.dataset.charKey = sign.charKey;
-  btn.innerHTML = `${ZODIAC_SILHOUETTES[sign.charKey]}<span>${sign.name}</span>`;
-  btn.addEventListener('click', () => {
-    localStorage.setItem(ZODIAC_LS_KEY, sign.charKey);
-    showPage('page-calendar');
-  });
-  registerGrid.appendChild(btn);
-});
 
 // カレンダー操作
-document.getElementById('tab-month').addEventListener('click', () => { calState.view = 'month'; renderCalendar(); });
-document.getElementById('tab-week').addEventListener('click',  () => { calState.view = 'week';  renderCalendar(); });
 document.getElementById('month-prev').addEventListener('click', () => {
   if (calState.monthIndex > MONTH_MIN) { calState.monthIndex--; renderMonth(); }
 });
 document.getElementById('month-next').addEventListener('click', () => {
   if (calState.monthIndex < MONTH_MAX) { calState.monthIndex++; renderMonth(); }
 });
-document.getElementById('week-prev').addEventListener('click', () => {
-  const s = calState.weekStart;
-  const prev = new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7);
-  if (prev.getTime() >= WEEK_MIN) { calState.weekStart = prev; renderWeek(); }
-});
-document.getElementById('week-next').addEventListener('click', () => {
-  const s = calState.weekStart;
-  const next = new Date(s.getFullYear(), s.getMonth(), s.getDate() + 7);
-  if (next.getTime() <= WEEK_MAX) { calState.weekStart = next; renderWeek(); }
-});
 document.getElementById('today-fortune-btn').addEventListener('click', () => showPage('page-today'));
-document.getElementById('change-zodiac-btn').addEventListener('click', openRegister);
-document.getElementById('register-cancel').addEventListener('click', () => showPage('page-calendar'));
 document.getElementById('today-back').addEventListener('click', () => showPage('page-calendar'));
 
-// 初期表示：星座未登録なら登録画面、登録済みならカレンダー
-if (getMySign()) {
-  showPage('page-calendar');
-} else {
-  openRegister();
-}
+// 初期表示：カレンダー
+showPage('page-calendar');

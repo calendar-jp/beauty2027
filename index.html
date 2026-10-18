@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>美女カレンダー2027（ウェブ版）</title>
   <meta name="description" content="美女カレンダー2027（ウェブ版）｜2026年11月〜2027年12月の祝日入りカレンダーと、美女と楽しむ毎日の12星座占い。">
   <link rel="icon" href="favicon.png" type="image/png">
@@ -37,13 +37,12 @@
       <div class="auth-title-area">
         <h1 class="auth-title">✦ 美女カレンダー2027 ✦</h1>
         <p class="app-subtitle">ウェブ版</p>
-        <p class="auth-date" id="auth-date"></p>
       </div>
 
       <div class="auth-img-wrap">
         <img id="auth-bg-img" class="auth-bg-img" src="" alt="">
         <div class="auth-overlay">
-          <p class="auth-overlay-label">メールアドレスを入力してスタート！</p>
+          <p class="auth-overlay-label">メールアドレスを入力して<br>スタート！</p>
           <div class="auth-input-wrap">
             <input
               type="email"
@@ -53,7 +52,7 @@
               autocomplete="email"
             />
           </div>
-          <button id="auth-submit-btn" class="auth-submit-btn">🩷 はじめる 🩷</button>
+          <button id="auth-submit-btn" class="auth-submit-btn">🩷 スタート 🩷</button>
           <p id="auth-error" class="auth-error" hidden></p>
         </div>
       </div>
@@ -68,14 +67,6 @@
       <p class="app-subtitle">ウェブ版</p>
       <p class="date" id="today-date"></p>
     </header>
-
-    <!-- Page: 星座登録（初回のみ／「星座を変更」から） -->
-    <section id="page-register" class="page" hidden>
-      <p class="label">✦ あなたの星座を選んでください ✦</p>
-      <p class="register-sub">あとからいつでも変更できます</p>
-      <div class="zodiac-pick-grid" id="register-grid"></div>
-      <button class="nav-btn back-btn register-cancel" id="register-cancel" hidden>← カレンダーへ戻る</button>
-    </section>
 
     <!-- Page: カレンダー（トップ） -->
     <section id="page-calendar" class="page" hidden>
@@ -109,14 +100,6 @@
         </ul>
       </div>
 
-      <div class="cal-toolbar">
-        <div class="view-tabs" role="tablist">
-          <button class="view-tab is-active" id="tab-month" role="tab" aria-selected="true">月</button>
-          <button class="view-tab" id="tab-week" role="tab" aria-selected="false">週</button>
-        </div>
-        <button class="change-zodiac-btn" id="change-zodiac-btn">星座を変更</button>
-      </div>
-
       <!-- 月表示 -->
       <div id="month-view">
         <div class="cal-nav">
@@ -124,24 +107,16 @@
           <h2 class="cal-label" id="month-label"></h2>
           <button class="cal-nav-btn" id="month-next">次の月 ＞</button>
         </div>
-        <div class="cal-weekdays">
-          <span class="sun">日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span class="sat">土</span>
+        <div class="cal-board">
+          <img class="cal-bg-img" id="cal-bg-img" src="" alt="">
+          <div class="cal-weekdays">
+            <span class="sun">日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span class="sat">土</span>
+          </div>
+          <div class="cal-grid" id="month-grid"></div>
         </div>
-        <div class="cal-grid" id="month-grid"></div>
-      </div>
-
-      <!-- 週表示 -->
-      <div id="week-view" hidden>
-        <div class="cal-nav">
-          <button class="cal-nav-btn" id="week-prev">＜ 前の週</button>
-          <h2 class="cal-label is-small" id="week-label"></h2>
-          <button class="cal-nav-btn" id="week-next">次の週 ＞</button>
-        </div>
-        <ul class="week-list" id="week-list"></ul>
       </div>
 
       <button class="today-fortune-btn" id="today-fortune-btn">✦ 今日の占いを見る ✦</button>
-      <p class="my-zodiac-note">あなたの星座：<span id="my-zodiac-name"></span></p>
       <p class="cal-toast" id="cal-toast" role="status" hidden>占いは当日のみ表示されます</p>
     </section>
 

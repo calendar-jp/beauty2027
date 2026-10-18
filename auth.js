@@ -13,14 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // 日付表示
-  const authDateEl = document.getElementById('auth-date');
-  if (authDateEl) {
-    const now = new Date();
-    const wd = ['日','月','火','水','木','金','土'][now.getDay()];
-    authDateEl.textContent = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日（${wd}）`;
-  }
-
   // ランダム画像表示（script.js の TOP_PAGE_IMAGES / FALLBACK_IMAGES を使用）
   const authImg = document.getElementById('auth-bg-img');
   if (authImg) {
