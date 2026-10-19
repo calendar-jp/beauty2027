@@ -107,7 +107,8 @@ const IMAGE_POOL_SOURCE = [
 ];
 
 // プールから除外する画像（IMAGE_POOL_SOURCE の何番目か。1始まり）
-const IMAGE_POOL_EXCLUDED = [14, 17, 22, 25, 30, 43, 51, 58, 59, 64, 68, 69, 70, 76, 78, 80, 85, 86, 91, 94];
+// 87・96 はサーバー上に存在しない（404）ため除外
+const IMAGE_POOL_EXCLUDED = [14, 17, 22, 25, 30, 43, 51, 58, 59, 64, 68, 69, 70, 76, 78, 80, 85, 86, 87, 91, 94, 96];
 
 const IMAGE_POOL = IMAGE_POOL_SOURCE.filter((_, i) => !IMAGE_POOL_EXCLUDED.includes(i + 1));
 

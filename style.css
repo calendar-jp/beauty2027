@@ -848,14 +848,6 @@ html, body {
 /* ═══════════════════════════════════════════
    美女カレンダー2027 追加スタイル
    ═══════════════════════════════════════════ */
-.app-subtitle {
-  margin-top: 2px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-sub);
-  letter-spacing: 0.2em;
-}
-
 /* ── カレンダー：ナビ ── */
 .cal-nav {
   display: flex;
@@ -899,11 +891,15 @@ body[data-page="page-calendar"] .container:not([hidden]) {
   min-height: 100dvh;
 }
 
+body[data-page="page-calendar"] .container:not([hidden]) {
+  padding-bottom: calc(36px + env(safe-area-inset-bottom));
+}
+
 @media (min-width: 431px) {
   body[data-page="page-calendar"] .container:not([hidden]) {
-    padding-top: calc(16px + env(safe-area-inset-top));
-    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    padding-top: calc(20px + env(safe-area-inset-top));
   }
+  body[data-page="page-calendar"] header { margin-bottom: 18px; padding-bottom: 14px; }
 }
 
 #page-calendar:not([hidden]),
@@ -922,7 +918,7 @@ body[data-page="page-calendar"] .container:not([hidden]) {
   overflow: hidden;
   border-radius: 16px;
   padding: 5px;
-  background: #E9D8B9;
+  background: #8D6E63;
 }
 
 .cal-bg-img {
@@ -948,33 +944,31 @@ body[data-page="page-calendar"] .container:not([hidden]) {
   grid-auto-rows: minmax(60px, 1fr);
 }
 
+/* マスは透明。文字は白＋暗い影で、明るい写真でも暗い写真でも読めるようにする */
 .cal-weekdays {
   margin-bottom: 4px;
   padding: 3px 0;
   border-radius: 8px;
-  background: rgba(255,255,255,0.5);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.28);
   font-size: 0.74rem;
-  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.8);
   font-weight: 700;
   text-align: center;
-  color: #5D4037;
+  color: #fff;
+  text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6);
 }
 
-.cal-weekdays .sun { color: #C62828; }
-.cal-weekdays .sat { color: #1565C0; }
+.cal-weekdays .sun { color: #FF8A80; }
+.cal-weekdays .sat { color: #82B1FF; }
 
 .cal-cell {
   font-family: inherit;
   min-height: 56px;
   padding: 4px 1px 3px;
-  border: 1px solid rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.7);
   border-radius: 10px;
-  background: rgba(255,255,255,0.34);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  color: #4E342E;
+  background: transparent;
+  box-shadow: 0 0 2px rgba(0,0,0,0.35); /* 明るい写真でも白い枠線が見えるように */
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -984,10 +978,8 @@ body[data-page="page-calendar"] .container:not([hidden]) {
 }
 
 .cal-cell.is-empty {
-  background: transparent;
   border-color: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  box-shadow: none;
   cursor: default;
 }
 .cal-cell:not(.is-empty):hover { border-color: #FFB300; }
@@ -997,10 +989,10 @@ body[data-page="page-calendar"] .container:not([hidden]) {
   height: 26px;
   line-height: 26px;
   border-radius: 50%;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
   text-align: center;
-  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85);
+  text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.65);
 }
 
 .cal-holiday {
@@ -1009,19 +1001,19 @@ body[data-page="page-calendar"] .container:not([hidden]) {
   line-height: 1.15;
   letter-spacing: -0.02em;
   text-align: center;
-  color: #C62828;
-  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.85);
+  color: #FFAB9F;
+  text-shadow: 0 0 1px rgba(0,0,0,1), 0 1px 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.8);
 }
 
 .cal-holiday span { display: block; white-space: nowrap; }
 
-.is-sun .cal-day, .is-holiday .cal-day { color: #C62828; }
-.is-sat .cal-day { color: #1565C0; }
+.is-sun .cal-day, .is-holiday .cal-day { color: #FF8A80; }
+.is-sat .cal-day { color: #82B1FF; }
 
 .cal-cell.is-today {
-  border: 3px solid #F57F17;
-  background: rgba(255,250,235,0.97);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.8), 0 2px 10px rgba(245,127,23,0.45);
+  border: 3px solid #FF9800;
+  background: rgba(255,152,0,0.22);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.9), 0 0 12px rgba(255,152,0,0.95);
 }
 .cal-cell.is-today .cal-day {
   background: linear-gradient(135deg, #F57F17, #FFA000);

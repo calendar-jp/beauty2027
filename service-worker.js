@@ -1,4 +1,4 @@
-const CACHE_NAME = 'beauty-calendar-2027-v4';
+const CACHE_NAME = 'beauty-calendar-2027-v6';
 
 // Network First で扱うコアファイル（更新が頻繁）
 const NETWORK_FIRST_ASSETS = [
@@ -12,7 +12,8 @@ const NETWORK_FIRST_ASSETS = [
 // Cache First で扱う静的アセット（ほぼ変わらない）
 const CACHE_FIRST_ASSETS = [
   './manifest.json',
-  './favicon.png',
+  './favicon.png?v=5',
+  './icons/apple-touch-icon.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './images/fallback1.jpg',
