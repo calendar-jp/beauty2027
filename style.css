@@ -495,6 +495,7 @@ h1 {
   margin-bottom: 12px;
 }
 
+/* 白っぽい写真の上でも読めるよう、半透明の暗い角丸ラベルを敷く */
 .sign-overlay-top {
   position: absolute;
   top: 10px;
@@ -503,6 +504,11 @@ h1 {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 11px 4px 7px;
+  border-radius: 50px;
+  background: rgba(0,0,0,0.42);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
 .sign-icon-sm {
@@ -856,7 +862,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .cal-label {
@@ -885,7 +891,32 @@ html, body {
 .cal-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* ── 月表示（背景に月ごとの美女画像、マスはすりガラス） ── */
+/* カレンダー画面は縦いっぱいに広げ、余った高さはマスの高さで吸収する */
+body[data-page="page-calendar"] .container:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+@media (min-width: 431px) {
+  body[data-page="page-calendar"] .container:not([hidden]) {
+    padding-top: calc(16px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+
+#page-calendar:not([hidden]),
+#month-view {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .cal-board {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -912,14 +943,20 @@ html, body {
   gap: 4px;
 }
 
+.cal-grid {
+  flex: 1 0 auto;
+  grid-auto-rows: minmax(60px, 1fr);
+}
+
 .cal-weekdays {
   margin-bottom: 4px;
   padding: 3px 0;
   border-radius: 8px;
-  background: rgba(255,255,255,0.74);
+  background: rgba(255,255,255,0.5);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   font-size: 0.74rem;
+  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.8);
   font-weight: 700;
   text-align: center;
   color: #5D4037;
@@ -932,9 +969,9 @@ html, body {
   font-family: inherit;
   min-height: 56px;
   padding: 4px 1px 3px;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.45);
   border-radius: 10px;
-  background: rgba(255,255,255,0.68);
+  background: rgba(255,255,255,0.34);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   color: #4E342E;
@@ -963,7 +1000,7 @@ html, body {
   font-size: 0.88rem;
   font-weight: 700;
   text-align: center;
-  text-shadow: 0 0 3px rgba(255,255,255,0.9);
+  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85);
 }
 
 .cal-holiday {
@@ -973,7 +1010,7 @@ html, body {
   letter-spacing: -0.02em;
   text-align: center;
   color: #C62828;
-  text-shadow: 0 0 3px rgba(255,255,255,0.9);
+  text-shadow: 0 0 2px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.85);
 }
 
 .cal-holiday span { display: block; white-space: nowrap; }
@@ -996,7 +1033,7 @@ html, body {
 .today-fortune-btn {
   display: block;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 24px;
   padding: 14px;
   font-family: inherit;
   font-size: 1rem;

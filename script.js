@@ -1,22 +1,123 @@
 // ═══════════════════════════════════════════
-//  カレンダー背景画像（月ごとに固定）
-//  差し替えるときは url を変更してください
+//  アプリ設定（テンプレートとして再利用するときはここを編集）
 // ═══════════════════════════════════════════
-const MONTH_BG_IMAGES = [
-  { month: '2026-11', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_001.jpg' },
-  { month: '2026-12', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_008.jpg' },
-  { month: '2027-01', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_015.jpg' },
-  { month: '2027-02', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_021.jpg' },
-  { month: '2027-03', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_028.jpg' },
-  { month: '2027-04', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_035.jpg' },
-  { month: '2027-05', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_042.jpg' },
-  { month: '2027-06', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_049.jpg' },
-  { month: '2027-07', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_056.jpg' },
-  { month: '2027-08', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_063.jpg' },
-  { month: '2027-09', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_071.jpg' },
-  { month: '2027-10', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_077.jpg' },
-  { month: '2027-11', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_084.jpg' },
-  { month: '2027-12', url: 'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_092.jpg' },
+// localStorage のキーの接頭辞（他のアプリと衝突しない名前にする）
+const APP_STORAGE_PREFIX = 'beauty_calendar2027';
+
+// 共有の画像プール（今日の占いグリッド・占いページ・カレンダー背景で使用）
+const IMAGE_POOL_SOURCE = [
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_001.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_002.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_003.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_004.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_005.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_006.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_007.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_008.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_009.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_010.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_011.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_012.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_013.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_014.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_015.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_016.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_017.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_018.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_019.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_020.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_021.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_022.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_023.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_024.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_025.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_026.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_027.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_028.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_029.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_030.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_031.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_032.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_033.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_034.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_035.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_036.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_037.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_038.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_039.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_040.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_041.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_042.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_043.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_044.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_045.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_046.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_047.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_048.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_049.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_050.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_051.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_052.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_053.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_054.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_055.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_056.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_057.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_058.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_059.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_060.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_061.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_062.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_063.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_064.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_065.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_066.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_067.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_068.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_069.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_070.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_071.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_072.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_073.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_074.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_075.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_076.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_077.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_078.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_079.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_080.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_081.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_082.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_083.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_084.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_085.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_086.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_087.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_088.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_089.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_090.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_091.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_092.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_093.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_094.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_095.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_096.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_097.jpg',
+  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_098.jpg',
+];
+
+// プールから除外する画像（IMAGE_POOL_SOURCE の何番目か。1始まり）
+const IMAGE_POOL_EXCLUDED = [14, 17, 22, 25, 30, 43, 51, 58, 59, 64, 68, 69, 70, 76, 78, 80, 85, 86, 91, 94];
+
+const IMAGE_POOL = IMAGE_POOL_SOURCE.filter((_, i) => !IMAGE_POOL_EXCLUDED.includes(i + 1));
+
+// 画像が読み込めないときの予備画像
+const FALLBACK_IMAGES = [
+  './images/fallback1.jpg',
+  './images/fallback2.jpg',
+  './images/fallback3.jpg',
+  './images/fallback4.jpg',
+  './images/fallback5.jpg'
 ];
 
 // ═══════════════════════════════════════════
@@ -295,109 +396,6 @@ function animateFortunePage(pageId) {
 
 const PAGES = ['page-calendar', 'page-today', 'page-overall', 'page-love', 'page-work', 'page-money'];
 
-const BEAUTY_IMAGES = [
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_001.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_002.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_003.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_004.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_005.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_006.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_007.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_008.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_009.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_010.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_011.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_012.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_013.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_014.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_015.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_016.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_017.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_018.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_019.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_020.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_021.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_022.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_023.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_024.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_025.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_026.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_027.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_028.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_029.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_030.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_031.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_032.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_033.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_034.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_035.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_036.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_037.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_038.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_039.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_040.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_041.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_042.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_043.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_044.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_045.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_046.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_047.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_048.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_049.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_050.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_051.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_052.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_053.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_054.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_055.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_056.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_057.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_058.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_059.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_060.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_061.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_062.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_063.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_064.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_065.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_066.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_067.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_068.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_069.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_070.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_071.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_072.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_073.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_074.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_075.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_076.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_077.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_078.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_079.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_080.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_081.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_082.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_083.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_084.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_085.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_086.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_087.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_088.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_089.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_090.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_091.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_092.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_093.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_094.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_095.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_096.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_097.jpg',
-  'https://joyu-dot-com.xyz/wp-content/uploads/2026/06/beautiful-woman_098.jpg',
-];
-
-const _EXCLUDED_TOP = new Set([14,17,22,25,30,43,51,58,59,64,68,69,70,76,78,80,85,86,91,94]);
-const TOP_PAGE_IMAGES = BEAUTY_IMAGES.filter((_, i) => !_EXCLUDED_TOP.has(i + 1));
 
 const PAGE_BEAUTY_IMG = {
   'page-overall': 'beauty-img-overall',
@@ -406,50 +404,95 @@ const PAGE_BEAUTY_IMG = {
   'page-money':   'beauty-img-money',
 };
 
-// ── トップページ画像（重複なし12枚割り当て）──
-const FALLBACK_IMAGES = [
-  './images/fallback1.jpg',
-  './images/fallback2.jpg',
-  './images/fallback3.jpg',
-  './images/fallback4.jpg',
-  './images/fallback5.jpg'
-];
+// ═══════════════════════════════════════════
+//  画像の山札
+//  プールをシャッフルした山札から上から順に配り、配り終えたら作り直す。
+//  山札は localStorage に保存し、次回は続きから配る。
+// ═══════════════════════════════════════════
+const DECK_STORAGE_KEY = `${APP_STORAGE_PREFIX}_image_deck`;
+let _deck = null;
+let _roundShown = new Set(); // 今回の利用ですでに表示した画像
 let _lastFallbackIndex = -1;
 
-let _topPageImgEls = [];
-
-function assignTopPageImages() {
-  const pool = [...TOP_PAGE_IMAGES];
-  for (let i = pool.length - 1; i > 0; i--) {
+function shuffled(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  _topPageImgEls.forEach((el, i) => {
-    if (!el.dataset.fallback) { el.src = pool[i % pool.length]; }
-  });
+  return a;
 }
 
-// ── セッション画像（重複なし4枚割り当て）──
-const SESSION_PAGES = ['page-overall', 'page-love', 'page-work', 'page-money'];
-let _sessionImages = {};
-
-function assignSessionImages() {
-  const pool = [...BEAUTY_IMAGES];
-  // Fisher-Yates シャッフル
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  SESSION_PAGES.forEach((pageId, i) => {
-    // 枚数が4未満でも安全に循環
-    _sessionImages[pageId] = pool[i % pool.length];
-  });
+// localStorage が使えない環境では null（毎回ランダムな山札で動く）
+function readSavedDeck() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(DECK_STORAGE_KEY));
+    if (saved && Array.isArray(saved.remaining) && Array.isArray(saved.known)) return saved;
+  } catch (e) { /* 使えない環境では無視 */ }
+  return null;
 }
 
-function applySessionImage(pageId) {
-  const imgId = PAGE_BEAUTY_IMG[pageId];
-  const el = imgId && document.getElementById(imgId);
-  if (!el || !_sessionImages[pageId]) return;
+function saveDeck() {
+  try {
+    localStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(_deck));
+  } catch (e) { /* 使えない環境では無視 */ }
+}
+
+// 保存済みの山札をプールの増減に合わせて補正する
+// （プールから消えた画像は捨て、新しく増えた画像は山札のランダムな位置に差し込む）
+function getDeck() {
+  if (_deck) return _deck;
+  const saved = readSavedDeck();
+  if (!saved) {
+    _deck = { remaining: shuffled(IMAGE_POOL), known: [...IMAGE_POOL] };
+    return _deck;
+  }
+  const pool  = new Set(IMAGE_POOL);
+  const known = new Set(saved.known);
+  const remaining = [...new Set(saved.remaining)].filter(url => pool.has(url));
+  IMAGE_POOL.filter(url => !known.has(url)).forEach(url => {
+    remaining.splice(Math.floor(Math.random() * (remaining.length + 1)), 0, url);
+  });
+  _deck = { remaining, known: [...IMAGE_POOL] };
+  return _deck;
+}
+
+// 新しい回（カレンダー画面に戻ったとき）を始める
+function startImageRound() {
+  _roundShown = new Set();
+}
+
+// 山札から count 枚配る。今回すでに表示した画像は飛ばす（飛ばした画像は山札に残る）
+function dealImages(count) {
+  if (!IMAGE_POOL.length) {
+    return Array.from({ length: count }, (_, i) => FALLBACK_IMAGES[i % FALLBACK_IMAGES.length]);
+  }
+  const deck = getDeck();
+  const dealt = [];
+  while (dealt.length < count) {
+    let idx = deck.remaining.findIndex(url => !_roundShown.has(url));
+    if (idx < 0) {
+      // 配り終えた（残りは今回表示済みのみ）→ 新しくシャッフルして作り直す
+      deck.remaining = shuffled(IMAGE_POOL);
+      idx = deck.remaining.findIndex(url => !_roundShown.has(url));
+      if (idx < 0) { _roundShown.clear(); idx = 0; } // 今回だけでプールを使い切った
+    }
+    const [url] = deck.remaining.splice(idx, 1);
+    _roundShown.add(url);
+    dealt.push(url);
+  }
+  saveDeck();
+  return dealt;
+}
+
+// 次に配られる画像を先読み（キャッシュ促進）
+function preloadUpcomingImages(count) {
+  getDeck().remaining.filter(url => !_roundShown.has(url)).slice(0, count)
+    .forEach(url => { new Image().src = url; });
+}
+
+// 読み込みに失敗したら予備画像に差し替える
+function setImageWithFallback(el, url) {
   el.onerror = function() {
     this.onerror = null;
     let idx;
@@ -458,9 +501,32 @@ function applySessionImage(pageId) {
     } while (FALLBACK_IMAGES.length > 1 && idx === _lastFallbackIndex);
     _lastFallbackIndex = idx;
     this.src = FALLBACK_IMAGES[idx];
-    this.dataset.fallback = '1';
   };
-  el.src = _sessionImages[pageId];
+  el.src = url;
+}
+
+// ── 今日の占いグリッド（12枚）──
+let _topPageImgEls = [];
+
+function assignTopPageImages() {
+  const urls = dealImages(_topPageImgEls.length);
+  _topPageImgEls.forEach((el, i) => setImageWithFallback(el, urls[i]));
+}
+
+// ── 占いページ（4枚）──
+const SESSION_PAGES = ['page-overall', 'page-love', 'page-work', 'page-money'];
+let _sessionImages = {};
+
+function assignSessionImages() {
+  const urls = dealImages(SESSION_PAGES.length);
+  SESSION_PAGES.forEach((pageId, i) => { _sessionImages[pageId] = urls[i]; });
+}
+
+function applySessionImage(pageId) {
+  const imgId = PAGE_BEAUTY_IMG[pageId];
+  const el = imgId && document.getElementById(imgId);
+  if (!el || !_sessionImages[pageId]) return;
+  setImageWithFallback(el, _sessionImages[pageId]);
 }
 
 function seededRand(seed) {
@@ -503,10 +569,14 @@ function formatMonthDay(d) {
   return `${d.getMonth() + 1}月${d.getDate()}日（${week[d.getDay()]}）`;
 }
 
+let _currentPageId = null;
+
 function showPage(pageId) {
   clearAllTimers();
   if (pageId === 'page-calendar') {
+    if (_currentPageId !== 'page-calendar') startImageRound();
     renderMonth();
+    preloadUpcomingImages(16);
     ensureHearts();
   }
   if (pageId === 'page-today') {
@@ -532,6 +602,8 @@ function showPage(pageId) {
   PAGES.forEach(id => {
     document.getElementById(id).hidden = (id !== pageId);
   });
+  _currentPageId = pageId;
+  document.body.dataset.page = pageId;
   // 今日の占い画面では見出し下の日付だけを表示する
   document.getElementById('today-date').hidden = (pageId === 'page-today');
   if (FORTUNE_PAGE_IDS.has(pageId)) {
@@ -670,17 +742,6 @@ SIGNS.forEach((sign, i) => {
   const img = document.createElement('img');
   img.className = 'sign-btn-img';
   img.alt = sign.name;
-  img.onerror = function() {
-    this.onerror = null;
-    let idx;
-    do {
-      idx = Math.floor(Math.random() * FALLBACK_IMAGES.length);
-    } while (FALLBACK_IMAGES.length > 1 && idx === _lastFallbackIndex);
-    _lastFallbackIndex = idx;
-    this.src = FALLBACK_IMAGES[idx];
-    this.dataset.fallback = '1';
-    console.log('Fallback applied for:', this.alt);
-  };
   _topPageImgEls.push(img);
   const nameSpan = document.createElement('span');
   nameSpan.className = 'btn-name';
@@ -692,17 +753,6 @@ SIGNS.forEach((sign, i) => {
   btn.addEventListener('click', () => showFortune(i));
   grid.appendChild(btn);
 });
-assignTopPageImages();
-
-// 次回表示用にプリロード（キャッシュ促進）
-(function preloadTopImages() {
-  const pool = [...TOP_PAGE_IMAGES];
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  pool.slice(0, 24).forEach(url => { new Image().src = url; });
-})();
 
 // ナビゲーション
 document.getElementById('overall-back').addEventListener('click', () => showPage('page-today'));
@@ -834,28 +884,9 @@ function holidayLabelHTML(name) {
   return parts.map(p => `<span>${p}</span>`).join('');
 }
 
-function monthBgUrl(year, month) {
-  const key = `${year}-${String(month + 1).padStart(2, '0')}`;
-  const entry = MONTH_BG_IMAGES.find(e => e.month === key);
-  return entry ? entry.url : FALLBACK_IMAGES[0];
-}
-
-function applyMonthBg(year, month) {
-  const img = document.getElementById('cal-bg-img');
-  if (img.dataset.month === `${year}-${month}`) return;
-  img.dataset.month = `${year}-${month}`;
-  img.onerror = function() {
-    this.onerror = null;
-    this.src = FALLBACK_IMAGES[calState.monthIndex % FALLBACK_IMAGES.length];
-  };
-  img.src = monthBgUrl(year, month);
-  // 前後の月の背景を先読み
-  [-1, 1].forEach(off => {
-    const idx = calState.monthIndex + off;
-    if (idx >= MONTH_MIN && idx <= MONTH_MAX) {
-      new Image().src = monthBgUrl(Math.floor(idx / 12), idx % 12);
-    }
-  });
+// カレンダー背景：表示のたびに山札から1枚引く
+function applyCalendarBg() {
+  setImageWithFallback(document.getElementById('cal-bg-img'), dealImages(1)[0]);
 }
 
 function renderMonth() {
@@ -865,7 +896,7 @@ function renderMonth() {
   document.getElementById('month-label').textContent = `${year}年${month + 1}月`;
   document.getElementById('month-prev').disabled = calState.monthIndex <= MONTH_MIN;
   document.getElementById('month-next').disabled = calState.monthIndex >= MONTH_MAX;
-  applyMonthBg(year, month);
+  applyCalendarBg();
 
   const grid = document.getElementById('month-grid');
   grid.innerHTML = '';

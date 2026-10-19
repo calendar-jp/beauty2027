@@ -13,14 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // ランダム画像表示（script.js の TOP_PAGE_IMAGES / FALLBACK_IMAGES を使用）
+  // ランダム画像表示（script.js の IMAGE_POOL / FALLBACK_IMAGES を使用）
   const authImg = document.getElementById('auth-bg-img');
   if (authImg) {
-    const pool = (typeof TOP_PAGE_IMAGES !== 'undefined' && TOP_PAGE_IMAGES.length)
-      ? TOP_PAGE_IMAGES
-      : (typeof BEAUTY_IMAGES !== 'undefined' && BEAUTY_IMAGES.length)
-        ? BEAUTY_IMAGES
-        : null;
+    const pool = (typeof IMAGE_POOL !== 'undefined' && IMAGE_POOL.length) ? IMAGE_POOL : null;
     if (pool) {
       authImg.src = pool[Math.floor(Math.random() * pool.length)];
       authImg.onerror = () => {
